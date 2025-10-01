@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Shield, CheckCircle2, XCircle, Clock, FileText } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Submission {
   id: string;
@@ -146,46 +147,48 @@ const AuthorityDashboard = () => {
             <CardDescription>Click on any submission to review details</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {submissions.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>No submissions yet</p>
-                </div>
-              ) : (
-                submissions.map((submission) => (
-                  <div
-                    key={submission.id}
-                    className="flex items-center gap-4 p-4 border rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
-                    onClick={() => {
-                      setSelectedSubmission(submission);
-                      setIsDialogOpen(true);
-                    }}
-                  >
-                    <img
-                      src={submission.imageUrl}
-                      alt="Dam inspection"
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <p className="font-mono text-sm font-semibold">{submission.id}</p>
-                        <Badge className={getStatusColor(submission.status)}>
-                          {getStatusIcon(submission.status)}
-                          <span className="ml-1">{submission.status}</span>
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Dam: {submission.damId} | Worker: {submission.workerId}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(submission.timestamp).toLocaleString()}
-                      </p>
-                    </div>
+            <ScrollArea className="h-[600px]">
+              <div className="space-y-4 pr-4">
+                {submissions.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No submissions yet</p>
                   </div>
-                ))
-              )}
-            </div>
+                ) : (
+                  submissions.map((submission) => (
+                    <div
+                      key={submission.id}
+                      className="flex items-center gap-4 p-4 border rounded-lg hover:bg-accent/50 cursor-pointer transition-colors"
+                      onClick={() => {
+                        setSelectedSubmission(submission);
+                        setIsDialogOpen(true);
+                      }}
+                    >
+                      <img
+                        src={submission.imageUrl}
+                        alt="Dam inspection"
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-mono text-sm font-semibold">{submission.id}</p>
+                          <Badge className={getStatusColor(submission.status)}>
+                            {getStatusIcon(submission.status)}
+                            <span className="ml-1">{submission.status}</span>
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Dam: {submission.damId} | Worker: {submission.workerId}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(submission.timestamp).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
       </div>
