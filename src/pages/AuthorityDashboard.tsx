@@ -194,66 +194,68 @@ const AuthorityDashboard = () => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-3xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Review Submission</DialogTitle>
             <DialogDescription>Verify the authenticity and quality of the submission</DialogDescription>
           </DialogHeader>
           {selectedSubmission && (
-            <div className="space-y-6">
-              <img
-                src={selectedSubmission.imageUrl}
-                alt="Dam inspection"
-                className="w-full rounded-lg shadow-lg"
-              />
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Transaction ID</p>
-                  <p className="font-mono font-semibold">{selectedSubmission.id}</p>
+            <ScrollArea className="h-[calc(90vh-120px)]">
+              <div className="space-y-6 pr-4">
+                <img
+                  src={selectedSubmission.imageUrl}
+                  alt="Dam inspection"
+                  className="w-full rounded-lg shadow-lg"
+                />
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Transaction ID</p>
+                    <p className="font-mono font-semibold">{selectedSubmission.id}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Status</p>
+                    <Badge className={getStatusColor(selectedSubmission.status)}>
+                      {selectedSubmission.status}
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Dam ID</p>
+                    <p className="font-semibold">{selectedSubmission.damId}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Worker ID</p>
+                    <p className="font-semibold">{selectedSubmission.workerId}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Image Hash (SHA-256)</p>
+                    <p className="font-mono text-xs break-all">{selectedSubmission.imageHash}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">Timestamp</p>
+                    <p className="text-sm">{new Date(selectedSubmission.timestamp).toLocaleString()}</p>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Status</p>
-                  <Badge className={getStatusColor(selectedSubmission.status)}>
-                    {selectedSubmission.status}
-                  </Badge>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Dam ID</p>
-                  <p className="font-semibold">{selectedSubmission.damId}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Worker ID</p>
-                  <p className="font-semibold">{selectedSubmission.workerId}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Image Hash (SHA-256)</p>
-                  <p className="font-mono text-xs break-all">{selectedSubmission.imageHash}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Timestamp</p>
-                  <p className="text-sm">{new Date(selectedSubmission.timestamp).toLocaleString()}</p>
-                </div>
+                {selectedSubmission.status === "pending" && (
+                  <div className="flex gap-4">
+                    <Button
+                      className="flex-1"
+                      onClick={() => handleVerify(selectedSubmission, "verified")}
+                    >
+                      <CheckCircle2 className="mr-2 h-4 w-4" />
+                      Verify
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      className="flex-1"
+                      onClick={() => handleVerify(selectedSubmission, "rejected")}
+                    >
+                      <XCircle className="mr-2 h-4 w-4" />
+                      Reject
+                    </Button>
+                  </div>
+                )}
               </div>
-              {selectedSubmission.status === "pending" && (
-                <div className="flex gap-4">
-                  <Button
-                    className="flex-1"
-                    onClick={() => handleVerify(selectedSubmission, "verified")}
-                  >
-                    <CheckCircle2 className="mr-2 h-4 w-4" />
-                    Verify
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    className="flex-1"
-                    onClick={() => handleVerify(selectedSubmission, "rejected")}
-                  >
-                    <XCircle className="mr-2 h-4 w-4" />
-                    Reject
-                  </Button>
-                </div>
-              )}
-            </div>
+            </ScrollArea>
           )}
         </DialogContent>
       </Dialog>
